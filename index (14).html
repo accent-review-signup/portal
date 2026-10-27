@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accent Verification Project — Application</title>
+<meta name="description" content="Apply as an individual or vendor for the multilingual Accent Verification project. Remote work on the Magic Data platform.">
+<meta property="og:title" content="Accent Verification Project — Now Hiring (Remote)">
+<meta property="og:description" content="Reviewers needed for German, Spanish, Tagalog, Korean, Dutch, Italian and more. Individuals and vendors welcome.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2f5bea">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f5bea'/%3E%3Cpath d='M18 26v12M26 20v24M34 14v36M42 22v20M50 28v8' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#ffffff; --ink:#14161a; --muted:#5d6470; --line:#e2e5ea;
+    --accent:#2f5bea; --accent-soft:#eaf0ff; --ok:#14804a; --ok-soft:#e6f6ee; --err:#c4342d;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 16px 64px}
+
+  header.hero{margin-bottom:24px}
+  .eyebrow{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:5px 10px;border-radius:999px}
+  h1{font-size:clamp(26px,4.6vw,36px);line-height:1.15;margin:14px 0 10px;letter-spacing:-.02em}
+  .lead{color:var(--muted);margin:0;font-size:16px;max-width:620px}
+
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 0}
+  .fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .fact b{display:block;font-size:12px;color:var(--muted);font-weight:500}
+  .fact span{font-weight:600;font-size:15px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin-top:18px}
+  .card h2{font-size:17px;margin:0 0 4px}
+  .card .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+
+  .coverage{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:#fafbfc}
+  .chip b{font-weight:600}
+
+  .toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+  .toggle input{position:absolute;opacity:0;pointer-events:none}
+  .toggle label{border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.15s}
+  .toggle label strong{display:block;font-size:15px}
+  .toggle label small{color:var(--muted);font-size:13px}
+  .toggle input:checked + label{border-color:var(--accent);background:var(--accent-soft)}
+  .toggle input:focus-visible + label{outline:2px solid var(--accent);outline-offset:2px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .full{grid-column:1/-1}
+  .field label.lbl{display:block;font-size:14px;font-weight:500;margin-bottom:6px}
+  .req{color:var(--err)}
+  input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{
+    width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid #cfd4dc;border-radius:10px;padding:11px 12px;transition:border-color .15s, box-shadow .15s}
+  textarea{min-height:92px;resize:vertical}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,91,234,.15)}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:5px}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--err)}
+  .err-msg{display:none;color:var(--err);font-size:12.5px;margin-top:5px}
+  .field.invalid .err-msg{display:block}
+
+  .langs{display:grid;gap:10px}
+  .lang-row{display:grid;grid-template-columns:auto 1fr 170px;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .lang-row.on{border-color:var(--accent);background:#fbfcff}
+  .lang-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+  .lang-row .name{font-weight:500}
+  .lang-row select{padding:8px 10px;font-size:14px}
+  .lang-row select:disabled{opacity:.45}
+  .empty{color:var(--muted);font-size:14px;border:1px dashed var(--line);border-radius:10px;padding:14px;text-align:center}
+
+  .radios{display:flex;flex-wrap:wrap;gap:8px}
+  .radios label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;cursor:pointer;font-size:14px}
+  .radios input{accent-color:var(--accent)}
+
+  .vendor-only{display:none}
+  body.is-vendor .vendor-only{display:block}
+  .member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .member-grid .m{border:1px solid var(--line);border-radius:10px;padding:10px}
+  .member-grid .m label{font-size:13px;font-weight:500;display:block;margin-bottom:4px}
+
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+  .consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent)}
+
+  .actions{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  button.primary{font:inherit;font-weight:600;font-size:15px;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px 22px;cursor:pointer;transition:filter .15s}
+  button.primary:hover{filter:brightness(1.08)}
+  button.primary:disabled{opacity:.6;cursor:progress}
+  .form-error{color:var(--err);font-size:14px}
+
+  .success{display:none;text-align:center;padding:36px 26px}
+  .success .tick{width:56px;height:56px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 14px;font-size:28px;font-weight:700}
+  .success h2{font-size:22px;margin:0 0 8px}
+  .success p{color:var(--muted);margin:0 auto 18px;max-width:480px}
+  .must{background:#fff7e6;border:1px solid #f3d38a;color:#7a5200;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:500;margin:0 auto 18px;max-width:480px}
+  .wa{display:inline-flex;align-items:center;gap:10px;background:#1fa855;color:#fff;text-decoration:none;font-weight:600;padding:14px 24px;border-radius:12px;font-size:16px}
+  .wa:hover{filter:brightness(1.06)}
+  .wa svg{width:22px;height:22px}
+  .ref{font-size:13px;color:var(--muted);margin-top:16px}
+
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:28px}
+
+  @media (max-width:640px){
+    .wrap{padding-top:28px}
+    .facts{grid-template-columns:1fr 1fr}
+    .grid{grid-template-columns:1fr}
+    .card{padding:20px}
+    .lang-row{grid-template-columns:auto 1fr}
+    .lang-row select{grid-column:1/-1}
+    .toggle{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">Now hiring · Remote</span>
+    <h1>Accent Verification Project</h1>
+    <p class="lead">We are looking for people who can listen to recorded conversations and confirm whether the speaker's accent truly matches their stated country. Speakers recorded in German, Spanish, Tagalog, Korean, Dutch, Italian and more. Open to both individuals and vendors.</p>
+    <div class="facts">
+      <div class="fact"><b>Platform</b><span>Magic Data</span></div>
+      <div class="fact"><b>Work type</b><span>Remote</span></div>
+      <div class="fact"><b>Open to</b><span>Individuals &amp; Vendors</span></div>
+      <div class="fact"><b>Pay rate</b><span>To be confirmed</span></div>
+    </div>
+  </header>
+
+  <section class="card" id="coverageCard">
+    <h2>Who we need</h2>
+    <p class="sub">You must live in (or be a native of) the listed country and understand the listed language well.</p>
+    <div class="coverage" id="coverage"></div>
+  </section>
+
+  <form id="appForm" novalidate>
+    <section class="card">
+      <h2>1. How are you applying?</h2>
+      <p class="sub">Vendors can register a team. Individuals apply for themselves.</p>
+      <div class="toggle" role="radiogroup">
+        <input type="radio" name="applicantType" id="tInd" value="Individual" checked>
+        <label for="tInd"><strong>Individual</strong><small>I will work on the project myself</small></label>
+        <input type="radio" name="applicantType" id="tVen" value="Vendor">
+        <label for="tVen"><strong>Vendor / Agency</strong><small>I manage a team of reviewers</small></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Your details</h2>
+      <p class="sub" id="detailsSub">Tell us how to reach you.</p>
+      <div class="grid">
+        <div class="field vendor-only full">
+          <label class="lbl" for="companyName">Company / team name <span class="req">*</span></label>
+          <input type="text" id="companyName" name="companyName" autocomplete="organization">
+          <div class="err-msg">Please enter your company or team name.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="fullName"><span id="nameLabel">Full name</span> <span class="req">*</span></label>
+          <input type="text" id="fullName" name="fullName" autocomplete="name" required>
+          <div class="err-msg">Please enter your full name.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+          <div class="err-msg">Please enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="whatsapp">WhatsApp number <span class="req">*</span></label>
+          <input type="tel" id="whatsapp" name="whatsapp" placeholder="+62 812 3456 7890" autocomplete="tel" required>
+          <div class="hint">Include your country code.</div>
+          <div class="err-msg">Enter a valid number with country code (e.g. +62...).</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="country">Country <span class="req">*</span></label>
+          <select id="country" name="country" required></select>
+          <div class="err-msg">Please select your country.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="city">City <span class="req">*</span></label>
+          <input type="text" id="city" name="city" autocomplete="address-level2" required>
+          <div class="err-msg">Please enter your city.</div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="nativeLanguage">Native language <span class="req">*</span></label>
+          <input type="text" id="nativeLanguage" name="nativeLanguage" placeholder="e.g. Bahasa Indonesia" required>
+          <div class="err-msg">Please enter your native language.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Languages you can review</h2>
+      <p class="sub" id="langSub">Select your country first. Then tick every language you understand and pick your level.</p>
+      <div class="field" id="langField">
+        <div class="langs" id="langList"><div class="empty">Select your country above to see the available languages.</div></div>
+        <div class="err-msg">Select at least one language.</div>
+      </div>
+
+      <div class="field vendor-only" style="margin-top:20px" id="membersField">
+        <label class="lbl">Team members per language <span class="req">*</span></label>
+        <div class="member-grid" id="memberGrid"></div>
+        <div class="hint">How many qualified reviewers can you provide for each selected language?</div>
+        <div class="err-msg">Enter the number of members for each selected language.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>4. Experience &amp; availability</h2>
+      <p class="sub">This helps us assign the right tasks.</p>
+      <div class="grid">
+        <div class="field full" id="expField">
+          <label class="lbl">Have you done audio QA, transcription or accent review work before? <span class="req">*</span></label>
+          <div class="radios">
+            <label><input type="radio" name="experience" value="Yes"> Yes</label>
+            <label><input type="radio" name="experience" value="No"> No</label>
+          </div>
+          <div class="err-msg">Please choose one.</div>
+        </div>
+        <div class="field full">
+          <label class="lbl" for="experienceDetails">Briefly describe your experience</label>
+          <textarea id="experienceDetails" name="experienceDetails" placeholder="Projects, platforms or companies you have worked with"></textarea>
+        </div>
+        <div class="field" id="deviceField">
+          <label class="lbl" for="device">Main device <span class="req">*</span></label>
+          <select id="device" name="device">
+            <option value="">Select…</option>
+            <option>Laptop</option>
+            <option>Desktop PC</option>
+            <option>Mobile only</option>
+          </select>
+          <div class="err-msg">Please select your device.</div>
+        </div>
+        <div class="field" id="headField">
+          <label class="lbl" for="headphones">Headphones / earphones <span class="req">*</span></label>
+          <select id="headphones" name="headphones">
+            <option value="">Select…</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+          <div class="err-msg">Please choose one.</div>
+        </div>
+        <div class="field" id="availField">
+          <label class="lbl" for="availability">Hours available per day <span class="req">*</span></label>
+          <select id="availability" name="availability">
+            <option value="">Select…</option>
+            <option>1–2 hours</option>
+            <option>3–4 hours</option>
+            <option>5–6 hours</option>
+            <option>7+ hours</option>
+          </select>
+          <div class="err-msg">Please select your availability.</div>
+        </div>
+        <div class="field" id="startField">
+          <label class="lbl" for="startDate">When can you start? <span class="req">*</span></label>
+          <select id="startDate" name="startDate">
+            <option value="">Select…</option>
+            <option>Immediately</option>
+            <option>Within 1 week</option>
+            <option>Within 2 weeks</option>
+          </select>
+          <div class="err-msg">Please choose one.</div>
+        </div>
+        <div class="field full">
+          <label class="lbl" for="notes">Anything else we should know?</label>
+          <textarea id="notes" name="notes" placeholder="Optional"></textarea>
+        </div>
+        <div class="field full" id="consentField">
+          <label class="consent"><input type="checkbox" id="consent"> I confirm that the information above is accurate and I agree to join the project WhatsApp group after submitting.</label>
+          <div class="err-msg">Please confirm to continue.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="primary" id="submitBtn">Submit application</button>
+        <span class="form-error" id="formError" role="alert"></span>
+      </div>
+    </section>
+  </form>
+
+  <section class="card success" id="success" aria-live="polite">
+    <div class="tick">✓</div>
+    <h2>Application received</h2>
+    <p id="successText">Thank you for applying. All project updates and onboarding instructions are shared in the WhatsApp group.</p>
+    <div class="must">Joining the WhatsApp group is required to be considered for this project.</div>
+    <a class="wa" id="waBtn" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 12 0C5.4 0 .1 5.3.1 11.9c0 2.1.6 4.1 1.6 5.9L0 24l6.4-1.7a11.9 11.9 0 0 0 5.6 1.4h.1c6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.3ZM12 21.8a9.9 9.9 0 0 1-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.9 9.9 0 1 1 8.4 4.7Zm5.4-7.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1l-.9 1.2c-.2.2-.3.2-.6.1a8.1 8.1 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.7.9 3.6.7.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4l-.9-.4Z"/></svg>
+      <span id="waText">Join WhatsApp Group</span>
+    </a>
+    <div class="ref" id="refText"></div>
+  </section>
+
+  <footer>Accent Verification Project · Remote · Magic Data platform</footer>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — edit these values
+   ============================================================ */
+// 1) Paste your Google Apps Script Web App URL here
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5hcyQfA62BnOqW7SjUBsaFJ2VPzuOgbvk1aJqQvjkGuphLxmYe_b35Mw1xe1zpbhh/exec";
+
+// 2) Countries + languages shown in the form.
+//    WhatsApp links: easiest is to paste them in the Google Sheet "Settings" tab.
+//    The links below are only a fallback if a Settings cell is empty.
+const COUNTRIES = {
+  "Indonesia":   { languages: ["German","Spanish","Italian","Korean","Dutch","Tagalog","Japanese","Turkish"],
+                   whatsapp: "https://chat.whatsapp.com/INDONESIA_GROUP_LINK" },
+  "Philippines": { languages: ["Tagalog","Spanish"],
+                   whatsapp: "https://chat.whatsapp.com/PHILIPPINES_GROUP_LINK" },
+  "India":       { languages: ["Assamese","Gujarati","Malayalam","Nepali","Odia","Tamil","Urdu (Indian)"],
+                   whatsapp: "https://chat.whatsapp.com/INDIA_GROUP_LINK" },
+  "Egypt":       { languages: ["Arabic"],
+                   whatsapp: "https://chat.whatsapp.com/EGYPT_GROUP_LINK" },
+  "Kenya":       { languages: ["German"],
+                   whatsapp: "https://chat.whatsapp.com/KENYA_GROUP_LINK" },
+  "Italy":       { languages: ["Italian"],
+                   whatsapp: "https://chat.whatsapp.com/ITALY_GROUP_LINK" },
+  "Nepal":       { languages: ["Nepali"],
+                   whatsapp: "https://chat.whatsapp.com/NEPAL_GROUP_LINK" },
+  "Myanmar":     { languages: ["Burmese"],
+                   whatsapp: "https://chat.whatsapp.com/MYANMAR_GROUP_LINK" }
+};
+const LEVELS = ["Native","Fluent","Intermediate"];
+/* ============================================================ */
+
+const $ = s => document.querySelector(s);
+const form = $("#appForm");
+const countrySel = $("#country");
+
+// Coverage chips + country dropdown
+$("#coverage").innerHTML = Object.entries(COUNTRIES)
+  .map(([c,v]) => `<span class="chip"><b>${c}</b> · ${v.languages.join(", ")}</span>`).join("");
+countrySel.innerHTML = `<option value="">Select your country…</option>` +
+  Object.keys(COUNTRIES).map(c => `<option>${c}</option>`).join("");
+
+// Applicant type toggle
+function syncType(){
+  const vendor = form.applicantType.value === "Vendor";
+  document.body.classList.toggle("is-vendor", vendor);
+  $("#nameLabel").textContent = vendor ? "Contact person name" : "Full name";
+  $("#detailsSub").textContent = vendor ? "Company details and the main contact person." : "Tell us how to reach you.";
+  $("#langSub").textContent = vendor
+    ? "Select your country first. Then tick every language your team can review."
+    : "Select your country first. Then tick every language you understand and pick your level.";
+  renderMembers();
+}
+form.querySelectorAll('input[name=applicantType]').forEach(r => r.addEventListener("change", syncType));
+
+// Languages per country
+function renderLangs(){
+  const c = COUNTRIES[countrySel.value];
+  const list = $("#langList");
+  if(!c){ list.innerHTML = `<div class="empty">Select your country above to see the available languages.</div>`; renderMembers(); return; }
+  list.innerHTML = c.languages.map((l,i) => `
+    <label class="lang-row" data-lang="${l}">
+      <input type="checkbox" value="${l}">
+      <span class="name">${l}</span>
+      <select disabled aria-label="${l} level">
+        <option value="">Your level…</option>
+        ${LEVELS.map(x => `<option>${x}</option>`).join("")}
+      </select>
+    </label>`).join("");
+  list.querySelectorAll(".lang-row").forEach(row => {
+    const cb = row.querySelector("input"), sel = row.querySelector("select");
+    cb.addEventListener("change", () => {
+      sel.disabled = !cb.checked; row.classList.toggle("on", cb.checked);
+      if(!cb.checked) sel.value = "";
+      renderMembers(); $("#langField").classList.remove("invalid");
+    });
+    sel.addEventListener("click", e => e.stopPropagation());
+    sel.addEventListener("change", () => $("#langField").classList.remove("invalid"));
+  });
+  renderMembers();
+}
+countrySel.addEventListener("change", renderLangs);
+
+function selectedLangs(){
+  return [...document.querySelectorAll(".lang-row")]
+    .filter(r => r.querySelector("input").checked)
+    .map(r => ({ lang: r.dataset.lang, level: r.querySelector("select").value }));
+}
+
+function renderMembers(){
+  const grid = $("#memberGrid");
+  const prev = {};
+  grid.querySelectorAll("input").forEach(i => prev[i.dataset.lang] = i.value);
+  const langs = selectedLangs();
+  grid.innerHTML = langs.length
+    ? langs.map(({lang}) => `<div class="m"><label>${lang}</label><input type="number" min="1" inputmode="numeric" data-lang="${lang}" value="${prev[lang]||""}" placeholder="0"></div>`).join("")
+    : `<div class="empty" style="grid-column:1/-1">Select languages above first.</div>`;
+}
+
+// Validation
+function setInvalid(el, bad){ el.classList.toggle("invalid", bad); return !bad; }
+function fieldOf(id){ return document.getElementById(id).closest(".field"); }
+
+function validate(){
+  const vendor = form.applicantType.value === "Vendor";
+  let ok = true;
+  const req = ["fullName","city","nativeLanguage"];
+  if(vendor) req.push("companyName");
+  req.forEach(id => { ok = setInvalid(fieldOf(id), !$("#"+id).value.trim()) && ok; });
+  ok = setInvalid(fieldOf("email"), !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#email").value.trim())) && ok;
+  const phone = $("#whatsapp").value.replace(/[\s\-()]/g,"");
+  ok = setInvalid(fieldOf("whatsapp"), !/^\+\d{8,15}$/.test(phone)) && ok;
+  ok = setInvalid(fieldOf("country"), !countrySel.value) && ok;
+
+  const langs = selectedLangs();
+  const langBad = !langs.length || (!vendor && langs.some(l => !l.level));
+  $("#langField").querySelector(".err-msg").textContent = !langs.length
+    ? "Select at least one language." : "Choose your level for each selected language.";
+  ok = setInvalid($("#langField"), langBad) && ok;
+
+  if(vendor){
+    const nums = [...$("#memberGrid").querySelectorAll("input")];
+    ok = setInvalid($("#membersField"), !nums.length || nums.some(n => !(parseInt(n.value,10) > 0))) && ok;
+  }
+  ok = setInvalid($("#expField"), !form.experience.value) && ok;
+  ["device","headphones","availability","startDate"].forEach(id => { ok = setInvalid(fieldOf(id), !$("#"+id).value) && ok; });
+  ok = setInvalid($("#consentField"), !$("#consent").checked) && ok;
+  return ok;
+}
+["input","change"].forEach(ev => form.addEventListener(ev, e => {
+  const f = e.target.closest(".field"); if(f) f.classList.remove("invalid");
+  if(!document.querySelector(".field.invalid")) $("#formError").textContent = "";
+}));
+
+// Submit
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  $("#formError").textContent = "";
+  if(!validate()){
+    $("#formError").textContent = "Please fix the highlighted fields.";
+    const first = document.querySelector(".field.invalid");
+    if(first) first.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  const vendor = form.applicantType.value === "Vendor";
+  const langs = selectedLangs();
+  const members = [...$("#memberGrid").querySelectorAll("input")].map(i => `${i.dataset.lang}: ${i.value}`);
+  const ref = "AV-" + Date.now().toString(36).toUpperCase();
+
+  const payload = {
+    reference: ref,
+    applicantType: form.applicantType.value,
+    companyName: vendor ? $("#companyName").value.trim() : "",
+    fullName: $("#fullName").value.trim(),
+    email: $("#email").value.trim(),
+    whatsapp: $("#whatsapp").value.trim(),
+    country: countrySel.value,
+    city: $("#city").value.trim(),
+    nativeLanguage: $("#nativeLanguage").value.trim(),
+    languages: langs.map(l => l.lang).join(", "),
+    languageLevels: langs.map(l => l.level ? `${l.lang} (${l.level})` : l.lang).join(" | "),
+    teamSize: vendor ? members.reduce((s,m) => s + parseInt(m.split(": ")[1],10), 0) : "",
+    membersPerLanguage: vendor ? members.join(" | ") : "",
+    experience: form.experience.value,
+    experienceDetails: $("#experienceDetails").value.trim(),
+    device: $("#device").value,
+    headphones: $("#headphones").value,
+    availability: $("#availability").value,
+    startDate: $("#startDate").value,
+    notes: $("#notes").value.trim()
+  };
+
+  const btn = $("#submitBtn");
+  btn.disabled = true; btn.textContent = "Submitting…";
+  try{
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    let data = {};
+    try{ data = await res.json(); }catch(_){}
+    if(data.status && !["success","duplicate"].includes(data.status)) throw new Error(data.message || "Submission failed.");
+    showSuccess(payload, data.status === "duplicate", data.whatsapp);
+  }catch(err){
+    $("#formError").textContent = err.message && !/fetch/i.test(err.message)
+      ? err.message : "Could not submit. Check your internet connection and try again.";
+    btn.disabled = false; btn.textContent = "Submit application";
+  }
+});
+
+const validWa = u => typeof u === "string" && /^https:\/\/(chat\.whatsapp\.com|wa\.me)\/[A-Za-z0-9]/.test(u) && !/_GROUP_LINK/.test(u);
+
+function showSuccess(p, duplicate, sheetLink){
+  // Link from the Sheet "Settings" tab wins. Otherwise use the link in COUNTRIES above.
+  const wa = validWa(sheetLink) ? sheetLink : (validWa(COUNTRIES[p.country].whatsapp) ? COUNTRIES[p.country].whatsapp : "");
+  if(!wa){
+    $("#waBtn").style.display = "none";
+    $(".must").textContent = "The WhatsApp group link will be sent to your email and WhatsApp shortly. Joining is required to be considered.";
+  }
+  if(duplicate){
+    $("#success h2").textContent = "You have already applied";
+  }
+  form.style.display = "none";
+  $("#coverageCard").style.display = "none";
+  $("#waBtn").href = wa;
+  $("#waText").textContent = `Join ${p.country} WhatsApp Group`;
+  $("#successText").textContent = duplicate
+    ? `This email is already registered for ${p.country}. If you have not joined the WhatsApp group yet please join now.`
+    : `Thank you ${p.fullName.split(" ")[0]}. Your application for ${p.country} has been received. All project updates and onboarding steps are shared only in the WhatsApp group.`;
+  $("#refText").textContent = `Reference ID: ${p.reference}`;
+  $("#success").style.display = "block";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+syncType();
+</script>
+</body>
+</html>
